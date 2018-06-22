@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Fast Location</string>
+    <string name="map_app_no_detected">No map app detected</string>
+</resources>
