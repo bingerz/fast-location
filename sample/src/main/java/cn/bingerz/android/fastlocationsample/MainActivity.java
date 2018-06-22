@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
         Button getLowAccuracy = findViewById(R.id.btn_get_low_accuracy_location);
         Button getLastKnow = findViewById(R.id.btn_get_last_know_location);
         mHandler = new MyHandler(this);
-        getLastKnowLocation();
 
         getHighAccuracy.setOnClickListener(new View.OnClickListener() {
             @Override
