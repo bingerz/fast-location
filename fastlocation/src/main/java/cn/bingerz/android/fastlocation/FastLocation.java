@@ -219,6 +219,10 @@ public class FastLocation {
         }
     }
 
+    public boolean isRequesting() {
+        return isRequesting;
+    }
+
     public void getLocation(LocationResultListener listener)
             throws SecurityException, IllegalStateException, IllegalArgumentException {
         getLocation(listener, null);
