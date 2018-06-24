@@ -11,7 +11,7 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-import cn.bingerz.android.fastlocation.utils.EasyLog;
+import cn.bingerz.easylog.EasyLog;
 
 public class LocationGooglePlayServicesProvider implements LocationProvider {
 
