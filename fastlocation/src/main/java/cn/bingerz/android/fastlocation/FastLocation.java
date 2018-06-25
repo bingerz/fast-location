@@ -115,7 +115,6 @@ public class FastLocation {
             @Override
             public void onLocationUpdated(Location location) {
                 printf(location);
-                mLastProviderTimestamp = location.getTime();
                 doLocationResult(location);
                 requestTimeoutMsgInit();
                 isRequesting = false;
@@ -173,6 +172,7 @@ public class FastLocation {
             EasyLog.i(String.format(format, latitude, longitude, accuracy, time, provider));
 
             mLastLocation = location;
+            mLastProviderTimestamp = location.getTime();
             synchronized (this) {
                 Iterator<LocationResultListener> iterator = mLocationResultListeners.iterator();
                 while (iterator.hasNext()) {
