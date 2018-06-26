@@ -24,7 +24,7 @@ public class FastLocation {
 
     private static final int MSG_REQUEST_TIMEOUT = 0x11;
 
-    private static final int TIMEOUT_REQUEST_LOCATION = 30 * 1000;
+    private static final int TIMEOUT_REQUEST_LOCATION = 15 * 1000;
 
     private Context mContext;
     private Location mLastLocation;
@@ -60,6 +60,14 @@ public class FastLocation {
         switch (msg.what) {
             case MSG_REQUEST_TIMEOUT:
                 removeLocationUpdates();
+                if (mLocationParams != null && mLocationParams == LocationParams.HIGH_ACCURACY) {
+                    mLocationParams = LocationParams.MEDIUM_ACCURACY;
+                    if (requestLocationUpdates(mLocationParams)) {
+                        delaySendRequestTimeout(TIMEOUT_REQUEST_LOCATION);
+                        return;
+                    }
+                }
+                finishResultListener(null);
                 break;
         }
     }
@@ -80,10 +88,6 @@ public class FastLocation {
         EasyLog.setLoggable(enable);
     }
 
-    public void setAppendTag(boolean enable) {
-        EasyLog.setAppendTag(enable);
-    }
-
     private MyHandler getHandler() {
         if (mHandler == null) {
             mHandler = new MyHandler(this);
@@ -98,7 +102,7 @@ public class FastLocation {
         return mLocationProvider;
     }
 
-    private LocationParams getLocationParams() {
+    public LocationParams getLocationParams() {
         if (mLocationParams == null) {
             mLocationParams = LocationParams.MEDIUM_ACCURACY;
         }
@@ -167,23 +171,12 @@ public class FastLocation {
         long time = location.getTime();
         String provider = location.getProvider();
 
-        if (mLocationResultListeners != null && !mLocationResultListeners.isEmpty()) {
-            String format = "Location result:<%f, %f> Accuracy:%f Time:%d Provider:%s";
-            EasyLog.i(String.format(format, latitude, longitude, accuracy, time, provider));
+        String format = "Location result:<%f, %f> Accuracy:%f Time:%d Provider:%s";
+        EasyLog.i(String.format(format, latitude, longitude, accuracy, time, provider));
 
-            mLastLocation = location;
-            mLastProviderTimestamp = location.getTime();
-            synchronized (this) {
-                Iterator<LocationResultListener> iterator = mLocationResultListeners.iterator();
-                while (iterator.hasNext()) {
-                    LocationResultListener listener = iterator.next();
-                    if (listener != null) {
-                        listener.onResult(location);
-                    }
-                    iterator.remove();
-                }
-            }
-        }
+        mLastLocation = location;
+        mLastProviderTimestamp = location.getTime();
+        finishResultListener(location);
     }
 
     private void requestTimeoutMsgInit() {
@@ -212,9 +205,24 @@ public class FastLocation {
         if (mLocationResultListeners == null) {
             mLocationResultListeners = new ArrayList<>();
         }
-        synchronized (this) {
+        synchronized (FastLocation.class) {
             if (locationResultListener != null && !findResultListener(locationResultListener)) {
                 mLocationResultListeners.add(locationResultListener);
+            }
+        }
+    }
+
+    private void finishResultListener(Location location) {
+        synchronized (FastLocation.class) {
+            if (mLocationResultListeners != null && !mLocationResultListeners.isEmpty()) {
+                Iterator<LocationResultListener> iterator = mLocationResultListeners.iterator();
+                while (iterator.hasNext()) {
+                    LocationResultListener listener = iterator.next();
+                    if (listener != null) {
+                        listener.onResult(location);
+                    }
+                    iterator.remove();
+                }
             }
         }
     }

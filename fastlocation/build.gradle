@@ -29,7 +29,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'cn.bingerz.android:easylog:1.0.0'
+    implementation 'cn.bingerz.android:easylog:1.0.1'
     implementation "com.google.android.gms:play-services-location:$rootProject.ext.gmsVersion"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -37,7 +37,7 @@ dependencies {
 }
 
 //Gradle Maven/JCenter
-version = "1.0.3"
+version = "1.0.7"
 group = "cn.bingerz.android"
 def siteUrl = 'https://github.com/bingerz/fast-location'
 def gitUrl = 'https://github.com/bingerz/fast-location.git'

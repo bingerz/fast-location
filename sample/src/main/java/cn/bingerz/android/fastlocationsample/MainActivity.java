@@ -117,6 +117,10 @@ public class MainActivity extends AppCompatActivity {
         fastLocation.getLocation(new LocationResultListener() {
             @Override
             public void onResult(Location location) {
+                if (location == null) {
+                    Log.e(TAG, "location is null");
+                    return;
+                }
                 Bundle data = new Bundle();
                 data.putParcelable(KEY_LOCATION, location);
                 Message msg = new Message();
