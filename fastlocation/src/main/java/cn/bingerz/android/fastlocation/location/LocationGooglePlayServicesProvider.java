@@ -45,7 +45,11 @@ public class LocationGooglePlayServicesProvider implements LocationProvider {
     }
 
     private LocationRequest getLocationRequest(LocationParams params) {
-        LocationRequest request = LocationRequest.create();
+        LocationRequest request = LocationRequest.create()
+                .setFastestInterval(params.getInterval())
+                .setInterval(params.getInterval())
+                .setSmallestDisplacement(params.getDistance());
+
         switch (params.getAccuracy()) {
             case HIGH:
                 request.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -59,7 +63,6 @@ public class LocationGooglePlayServicesProvider implements LocationProvider {
                 request.setPriority(LocationRequest.PRIORITY_LOW_POWER);
                 break;
         }
-        request.setNumUpdates(1);
         return request;
     }
 

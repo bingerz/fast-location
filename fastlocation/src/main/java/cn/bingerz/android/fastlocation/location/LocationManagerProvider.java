@@ -92,8 +92,10 @@ public class LocationManagerProvider implements LocationProvider {
         }
         mLocationCallbackListener = listener;
         mLocationParams = params;
+        long minTime = getLocationParams().getInterval();
+        float minDistance = getLocationParams().getDistance();
         Criteria criteria = getCriteria(getLocationParams());
-        getLocationManager().requestSingleUpdate(criteria, mLocationListener, Looper.getMainLooper());
+        getLocationManager().requestLocationUpdates(minTime, minDistance, criteria, mLocationListener, Looper.getMainLooper());
         EasyLog.d("Location request update. accuracy = %s", mLocationParams.getAccuracy());
     }
 

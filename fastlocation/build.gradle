@@ -37,7 +37,7 @@ dependencies {
 }
 
 //Gradle Maven/JCenter
-version = "1.0.7"
+version = "1.0.8"
 group = "cn.bingerz.android"
 def siteUrl = 'https://github.com/bingerz/fast-location'
 def gitUrl = 'https://github.com/bingerz/fast-location.git'
