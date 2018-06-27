@@ -27,10 +27,8 @@ public class FastLocation {
     private static final int TIMEOUT_REQUEST_LOCATION = 15 * 1000;
 
     private Context mContext;
-    private Location mLastLocation;
     private LocationProvider mLocationProvider;
     private LocationParams mLocationParams;
-    private long mLastProviderTimestamp = 0;
 
     private boolean isRequesting = false;
 
@@ -67,7 +65,7 @@ public class FastLocation {
                         return;
                     }
                 }
-                finishResultListener(null);
+                finishResult(null);
                 break;
         }
     }
@@ -119,7 +117,7 @@ public class FastLocation {
             @Override
             public void onLocationUpdated(Location location) {
                 printf(location);
-                doLocationResult(location);
+                finishResult(location);
                 requestTimeoutMsgInit();
                 isRequesting = false;
             }
@@ -136,46 +134,7 @@ public class FastLocation {
         isRequesting = false;
     }
 
-    private boolean isNeedFilter(Location location) {
-        if (mLastLocation != null && location != null) {
-            float distance = location.distanceTo(mLastLocation);
-            if (distance < getLocationParams().getAcceptableAccuracy()) {
-                return true;
-            }
-            if (location.getAccuracy() >= mLastLocation.getAccuracy()
-                    && distance < location.getAccuracy()) {
-                return true;
-            }
-            return location.getTime() <= mLastProviderTimestamp;
-        }
-        return false;
-    }
-
-    private void doLocationResult(Location location) {
-        checkLocation(location);
-
-        if (isNeedFilter(location)) {
-            EasyLog.d("location need to filtered out, timestamp is " + location.getTime());
-            finishResult(mLastLocation);
-        } else {
-            finishResult(location);
-        }
-    }
-
     private void finishResult(Location location) {
-        checkLocation(location);
-
-        double latitude = location.getLatitude();
-        double longitude = location.getLongitude();
-        float accuracy = location.getAccuracy();
-        long time = location.getTime();
-        String provider = location.getProvider();
-
-        String format = "Location result:<%f, %f> Accuracy:%f Time:%d Provider:%s";
-        EasyLog.i(String.format(format, latitude, longitude, accuracy, time, provider));
-
-        mLastLocation = location;
-        mLastProviderTimestamp = location.getTime();
         finishResultListener(location);
     }
 
