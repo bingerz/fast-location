@@ -35,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Location mCurrentLocation;
 
+    FastLocation mFastLocation;
+
     private static final class MyHandler extends Handler {
 
         WeakReference<MainActivity> mReference;
@@ -74,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         Button getLowAccuracy = findViewById(R.id.btn_get_low_accuracy_location);
         Button getLastKnow = findViewById(R.id.btn_get_last_know_location);
         mHandler = new MyHandler(this);
+        mFastLocation = new FastLocation(this);
 
         getHighAccuracy.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,8 +116,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getLocation(LocationParams params) {
-        FastLocation fastLocation = new FastLocation(this);
-        fastLocation.getLocation(new LocationResultListener() {
+        mFastLocation.getLocation(new LocationResultListener() {
             @Override
             public void onResult(Location location) {
                 if (location == null) {
