@@ -203,20 +203,9 @@ public class FastLocation {
 
         insertResultListener(listener);
         mLocationParams = params != null ? params : LocationParams.MEDIUM_ACCURACY;
-        getLocationProvider().getLastLocation(new LocationCallbackListener() {
-            @Override
-            public void onLocationUpdated(Location location) {
-                if (getLocationParams().isAcceptableTime(location)
-                        && getLocationParams().isAcceptableAccuracy(location)) {
-                    EasyLog.d("return best last know location.");
-                    finishResult(location);
-                    return;
-                }
-                if (requestLocationUpdates(mLocationParams)) {
-                    delaySendRequestTimeout(TIMEOUT_REQUEST_LOCATION);
-                }
-            }
-        });
+        if (requestLocationUpdates(mLocationParams)) {
+            delaySendRequestTimeout(TIMEOUT_REQUEST_LOCATION);
+        }
     }
 
     public void getLastKnowLocation(final LocationResultListener listener)
