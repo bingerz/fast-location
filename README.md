@@ -54,6 +54,6 @@ Get the last known location
 ```
 
 ## Location strategy
-HIGH_ACCURACY
-MEDIUM_ACCURACY (default)
-LOW_ACCURACY
+HIGH_ACCURACY  
+MEDIUM_ACCURACY (default)  
+LOW_ACCURACY  
