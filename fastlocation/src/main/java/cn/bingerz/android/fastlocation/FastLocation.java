@@ -134,8 +134,20 @@ public class FastLocation {
         isRequesting = false;
     }
 
+    private Location correctLocationTime(Location location) {
+        long currentTimeMillis = System.currentTimeMillis();
+        if (location != null) {
+            long diff = currentTimeMillis - location.getTime();
+            if (diff > 7 * 24 * 60 * 60 * 1000) {
+                EasyLog.d("Location result need correct time");
+                location.setTime(currentTimeMillis);
+            }
+        }
+        return location;
+    }
+
     private void finishResult(Location location) {
-        finishResultListener(location);
+        finishResultListener(correctLocationTime(location));
     }
 
     private void requestTimeoutMsgInit() {

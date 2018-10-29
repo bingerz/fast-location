@@ -6,7 +6,7 @@ An Android Platform library to quickly request the location
 You should add this to your dependencies:
 
 ```groovy
-compile 'cn.bingerz.android:fastlocation:1.1.0'
+compile 'cn.bingerz.android:fastlocation:1.1.1'
 ```
 
 ## Starting
