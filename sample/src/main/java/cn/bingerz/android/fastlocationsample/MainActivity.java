@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 import java.text.DateFormat;
@@ -172,7 +173,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void showLastKnowLocation(Location location) {
         if (location == null) {
-            throw new IllegalArgumentException("Invalid location.");
+            Toast.makeText(this, "Location is null.", Toast.LENGTH_SHORT).show();
+            return;
         }
         Log.e(TAG, "showLastKnowLocation: " + location);
         mCurrentLocation = location;
