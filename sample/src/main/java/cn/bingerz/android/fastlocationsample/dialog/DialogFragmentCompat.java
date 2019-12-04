@@ -4,8 +4,9 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
-import android.support.v4.app.DialogFragment;
 import android.view.Window;
+
+import androidx.fragment.app.DialogFragment;
 
 /**
  * Created by hanson on 2018/3/21.
