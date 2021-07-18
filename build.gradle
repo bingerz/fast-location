@@ -3,26 +3,18 @@
 buildscript {
     
     repositories {
+        mavenCentral()
         google()
-        jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.2'
-        //Gradle Bintray Plugin
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
-        //Gradle Android Maven plugin
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        classpath 'com.android.tools.build:gradle:4.2.2'
     }
 }
 
 allprojects {
     repositories {
-        google()
-        jcenter()
         mavenCentral()
+        google()
     }
 }
 
@@ -30,12 +22,18 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-ext {
-    compileSdkVersion = 28
-    buildToolsVersion = "28.0.3"
-    minSdkVersion = 14
-    targetSdkVersion = 28
+def build_versions = [:]
+build_versions.min_sdk = 14
+build_versions.target_sdk = 28
+build_versions.build_tools = "30.0.2"
+ext.build_versions = build_versions
 
-    // App dependencies
-    gmsVersion = "17.0.0"
-}
+def versions = [:]
+versions.support = "28.0.0"
+versions.gms = "18.0.0"
+
+versions.junit = '4.13.2'
+versions.rules = '1.0.2'
+versions.runner = '1.0.2'
+versions.espresso = '3.0.2'
+ext.versions = versions

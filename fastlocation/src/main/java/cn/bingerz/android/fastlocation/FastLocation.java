@@ -13,8 +13,8 @@ import cn.bingerz.android.fastlocation.location.LocationCallbackListener;
 import cn.bingerz.android.fastlocation.location.LocationParams;
 import cn.bingerz.android.fastlocation.location.LocationProvider;
 import cn.bingerz.android.fastlocation.location.LocationProviderFactory;
+import cn.bingerz.android.fastlocation.utils.EasyLog;
 import cn.bingerz.android.fastlocation.utils.PermissionUtils;
-import cn.bingerz.easylog.EasyLog;
 
 /**
  * Created by hanson on 01/03/2018.

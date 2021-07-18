@@ -8,8 +8,8 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
 
+import cn.bingerz.android.fastlocation.utils.EasyLog;
 import cn.bingerz.android.fastlocation.utils.PermissionUtils;
-import cn.bingerz.easylog.EasyLog;
 
 public class LocationManagerProvider implements LocationProvider {
 

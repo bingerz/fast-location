@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion build_versions.target_sdk
+    buildToolsVersion build_versions.build_tools
 
     defaultConfig {
         applicationId "cn.bingerz.android.fastlocationsample"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        minSdkVersion build_versions.min_sdk
+        targetSdkVersion build_versions.target_sdk
         versionCode 1
-        versionName version
+        versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -23,14 +23,14 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'cn.bingerz.android:geopoint:1.0.4'
-    implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'cn.bingerz.android:geopoint:1.0.5'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation project(':fastlocation')
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:rules:1.2.0'
-    androidTestImplementation "androidx.test:runner:1.2.0"
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    testImplementation "junit:junit:$versions.junit"
+    androidTestImplementation "androidx.test:rules:$versions.rules"
+    androidTestImplementation "com.android.support.test:runner:$versions.runner"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:$versions.espresso"
 }
