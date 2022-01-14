@@ -136,13 +136,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getLastKnowLocation() {
-        FastLocation fastLocation = new FastLocation(this);
-        fastLocation.getLastKnowLocation(new LocationResultListener() {
-            @Override
-            public void onResult(Location location) {
-                showLastKnowLocation(location);
-            }
-        });
+        try {
+            FastLocation fastLocation = new FastLocation(this);
+            fastLocation.getLastKnowLocation(new LocationResultListener() {
+                @Override
+                public void onResult(Location location) {
+                    showLastKnowLocation(location);
+                }
+            });
+        } catch (SecurityException | IllegalStateException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showLocation(Location location) {

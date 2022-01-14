@@ -30,7 +30,7 @@ ext.build_versions = build_versions
 
 def versions = [:]
 versions.support = "28.0.0"
-versions.gms = "18.0.0"
+versions.gms = "19.0.1"
 
 versions.junit = '4.13.2'
 versions.rules = '1.0.2'

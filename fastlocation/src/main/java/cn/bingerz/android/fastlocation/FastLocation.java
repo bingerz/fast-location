@@ -16,10 +16,6 @@ import cn.bingerz.android.fastlocation.location.LocationProviderFactory;
 import cn.bingerz.android.fastlocation.utils.EasyLog;
 import cn.bingerz.android.fastlocation.utils.PermissionUtils;
 
-/**
- * Created by hanson on 01/03/2018.
- */
-
 public class FastLocation {
 
     private static final int MSG_REQUEST_TIMEOUT = 0x11;
@@ -67,6 +63,8 @@ public class FastLocation {
                 }
                 finishResult(null);
                 break;
+            default:
+                break;
         }
     }
 
@@ -108,28 +106,37 @@ public class FastLocation {
     }
 
     private boolean requestLocationUpdates(LocationParams params) {
-        PermissionUtils.checkLocationGranted(mContext);
-        if (isRequesting) {
-            EasyLog.w("Request location update is busy");
+        try {
+            PermissionUtils.checkLocationGranted(mContext);
+            if (isRequesting) {
+                EasyLog.w("Request location update is busy");
+                return false;
+            }
+            getLocationProvider().request(new LocationCallbackListener() {
+                @Override
+                public void onLocationUpdated(Location location) {
+                    printf(location);
+                    finishResult(location);
+                    requestTimeoutMsgInit();
+                    isRequesting = false;
+                }
+            }, params);
+            isRequesting = true;
+        } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
-        getLocationProvider().request(new LocationCallbackListener() {
-            @Override
-            public void onLocationUpdated(Location location) {
-                printf(location);
-                finishResult(location);
-                requestTimeoutMsgInit();
-                isRequesting = false;
-            }
-        }, params);
-        isRequesting = true;
         return true;
     }
 
-    public void removeLocationUpdates() throws SecurityException, IllegalArgumentException {
-        PermissionUtils.checkLocationGranted(mContext);
-        if (getLocationProvider() != null) {
-            getLocationProvider().remove();
+    public void removeLocationUpdates() {
+        try {
+            PermissionUtils.checkLocationGranted(mContext);
+            if (getLocationProvider() != null) {
+                getLocationProvider().remove();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         isRequesting = false;
     }
