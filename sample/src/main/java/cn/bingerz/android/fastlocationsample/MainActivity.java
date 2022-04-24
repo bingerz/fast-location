@@ -23,9 +23,12 @@ import cn.bingerz.android.fastlocation.location.LocationParams;
 import cn.bingerz.android.fastlocation.utils.PermissionUtils;
 import cn.bingerz.android.fastlocationsample.dialog.MapChooseBLDialog;
 
+/**
+ * @author hanson
+ */
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private static final int REQUEST_LOCATION_PERMISSION = 111;
 

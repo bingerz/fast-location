@@ -11,6 +11,9 @@ import android.os.Looper;
 import cn.bingerz.android.fastlocation.utils.EasyLog;
 import cn.bingerz.android.fastlocation.utils.PermissionUtils;
 
+/**
+ * @author hanson
+ */
 public class LocationManagerProvider implements LocationProvider {
 
     private Context mContext = null;

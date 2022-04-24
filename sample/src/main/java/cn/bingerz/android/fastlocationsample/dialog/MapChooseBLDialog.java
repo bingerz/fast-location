@@ -26,9 +26,8 @@ import cn.bingerz.android.fastlocationsample.R;
 import cn.bingerz.android.geopoint.GeoPoint;
 import cn.bingerz.android.geopoint.Utils.GeoPointUtil;
 
-
 /**
- * Created by hanbing on 15/10/20.
+ * @author hanson
  */
 public class MapChooseBLDialog extends BottomListDialog {
 

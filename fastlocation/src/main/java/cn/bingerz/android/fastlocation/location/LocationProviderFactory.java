@@ -5,6 +5,9 @@ import android.content.Context;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+/**
+ * @author hanson
+ */
 public class LocationProviderFactory {
 
     public static LocationProvider getLocationProvider(Context context) {

@@ -2,6 +2,9 @@ package cn.bingerz.android.fastlocation.location;
 
 import android.location.Location;
 
+/**
+ * @author hanson
+ */
 public class LocationParams {
 
     public static final LocationParams HIGH_ACCURACY = new Builder()

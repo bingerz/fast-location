@@ -8,6 +8,7 @@ import android.os.Message;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Locale;
 
 import cn.bingerz.android.fastlocation.location.LocationCallbackListener;
 import cn.bingerz.android.fastlocation.location.LocationParams;
@@ -16,6 +17,9 @@ import cn.bingerz.android.fastlocation.location.LocationProviderFactory;
 import cn.bingerz.android.fastlocation.utils.EasyLog;
 import cn.bingerz.android.fastlocation.utils.PermissionUtils;
 
+/**
+ * @author hanson
+ */
 public class FastLocation {
 
     private static final int MSG_REQUEST_TIMEOUT = 0x11;
@@ -259,6 +263,6 @@ public class FastLocation {
         long time = location.getTime();
         String provider = location.getProvider();
 
-        EasyLog.d(String.format(format, latitude, longitude, accuracy, time, provider));
+        EasyLog.d(String.format(Locale.getDefault(), format, latitude, longitude, accuracy, time, provider));
     }
 }

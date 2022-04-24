@@ -3,9 +3,8 @@ package cn.bingerz.android.fastlocationsample;
 import android.app.Application;
 
 /**
- * Created by hanson on 2018/3/1.
+ * @author hanson
  */
-
 public class FastLocationApplication extends Application {
 
 }

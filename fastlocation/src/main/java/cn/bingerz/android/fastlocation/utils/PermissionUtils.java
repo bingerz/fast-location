@@ -8,9 +8,8 @@ import android.content.pm.PackageManager;
 import androidx.core.app.ActivityCompat;
 
 /**
- * Created by hanson on 01/03/2018.
+ * @author hanson
  */
-
 public class PermissionUtils {
 
     public static boolean isGranted(Context context, String permission) {

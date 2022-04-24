@@ -12,11 +12,9 @@ import androidx.fragment.app.FragmentManager;
 
 import cn.bingerz.android.fastlocationsample.R;
 
-
 /**
- * Created by hanson on 2018/3/22.
+ * @author hanson
  */
-
 public class BottomListDialog extends DialogFragmentCompat {
 
     public static final String TAG = "bottom_sheet_dialog";

@@ -9,9 +9,8 @@ import android.view.Window;
 import androidx.fragment.app.DialogFragment;
 
 /**
- * Created by hanson on 2018/3/21.
+ * @author hanson
  */
-
 public class DialogFragmentCompat extends DialogFragment {
 
     /**
