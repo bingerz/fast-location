@@ -109,7 +109,7 @@ public class LocationManagerProvider implements LocationProvider {
 
     @SuppressWarnings({"MissingPermission"})
     @Override
-    public void request(final LocationCallbackListener listener, LocationParams params) {
+    public void request(LocationParams params, final LocationCallbackListener listener) {
         if (listener == null) {
             EasyLog.w("LocationCallbackListener is null.");
         }
@@ -124,7 +124,7 @@ public class LocationManagerProvider implements LocationProvider {
 
 
     @RequiresApi(api = Build.VERSION_CODES.S)
-    private LocationRequest getLocationRequest(LocationParams params, boolean isSingle) {
+    private LocationRequest getLocationRequest(boolean isSingle, LocationParams params) {
         LocationRequest.Builder builder = new LocationRequest.Builder(params.getInterval())
                 .setMaxUpdates(isSingle ? 1 : Integer.MAX_VALUE)
                 .setDurationMillis(params.getAcceptableTime())
@@ -150,7 +150,7 @@ public class LocationManagerProvider implements LocationProvider {
 
     @SuppressWarnings({"MissingPermission"})
     @Override
-    public void requestSingle(LocationCallbackListener listener, LocationParams params) {
+    public void requestSingle(LocationParams params, LocationCallbackListener listener) {
         if (listener == null) {
             EasyLog.w("LocationCallbackListener is null.");
         }
@@ -159,9 +159,10 @@ public class LocationManagerProvider implements LocationProvider {
         Criteria criteria = getCriteria(getLocationParams());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             String provider = getProvider(params);
-            LocationRequest request = getLocationRequest(params, true);
+            LocationRequest request = getLocationRequest(true, params);
             mCancellationSignal = new CancellationSignal();
-            getLocationManager().getCurrentLocation(provider, request, mCancellationSignal, mContext.getMainExecutor(), mLocationConsumer);
+            getLocationManager().getCurrentLocation(provider, request, mCancellationSignal,
+                                                    mContext.getMainExecutor(), mLocationConsumer);
         } else {
             getLocationManager().requestSingleUpdate(criteria, mLocationListener, Looper.getMainLooper());
         }

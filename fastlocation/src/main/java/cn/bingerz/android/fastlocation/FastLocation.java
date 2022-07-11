@@ -72,6 +72,16 @@ public class FastLocation {
         }
     }
 
+    private LocationCallbackListener mLocationCallbackListener = new LocationCallbackListener() {
+        @Override
+        public void onLocationUpdated(Location location) {
+            printf(location);
+            finishResult(location);
+            requestTimeoutMsgInit();
+            isRequesting = false;
+        }
+    };
+
     private FastLocation() {
     }
 
@@ -116,15 +126,7 @@ public class FastLocation {
                 EasyLog.w("Request location update is busy");
                 return false;
             }
-            getLocationProvider().requestSingle(new LocationCallbackListener() {
-                @Override
-                public void onLocationUpdated(Location location) {
-                    printf(location);
-                    finishResult(location);
-                    requestTimeoutMsgInit();
-                    isRequesting = false;
-                }
-            }, params);
+            getLocationProvider().requestSingle(params, mLocationCallbackListener);
             isRequesting = true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -140,15 +142,7 @@ public class FastLocation {
                 EasyLog.w("Request location update is busy");
                 return false;
             }
-            getLocationProvider().request(new LocationCallbackListener() {
-                @Override
-                public void onLocationUpdated(Location location) {
-                    printf(location);
-                    finishResult(location);
-                    requestTimeoutMsgInit();
-                    isRequesting = false;
-                }
-            }, params);
+            getLocationProvider().request(params, mLocationCallbackListener);
             isRequesting = true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -237,12 +231,12 @@ public class FastLocation {
         return isRequesting;
     }
 
-    public void getLocation(LocationResultListener listener, boolean isSingle)
+    public void getLocation(boolean isSingle, LocationResultListener listener)
             throws SecurityException, IllegalStateException, IllegalArgumentException {
-        getLocation(listener, null, isSingle);
+        getLocation(isSingle, null, listener);
     }
 
-    public void getLocation(LocationResultListener listener, LocationParams params, boolean isSingle)
+    public void getLocation(boolean isSingle, LocationParams params, LocationResultListener listener)
             throws SecurityException, IllegalStateException, IllegalArgumentException {
         if (listener == null) {
             throw new IllegalArgumentException("invalid locationResultListener.");

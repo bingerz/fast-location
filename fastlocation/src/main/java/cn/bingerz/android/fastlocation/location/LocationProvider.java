@@ -9,9 +9,9 @@ public interface LocationProvider {
 
     void init(Context context);
 
-    void request(LocationCallbackListener listener, LocationParams params);
+    void request(LocationParams params, LocationCallbackListener listener);
 
-    void requestSingle(LocationCallbackListener listener, LocationParams params);
+    void requestSingle(LocationParams params, LocationCallbackListener listener);
 
     void remove();
 

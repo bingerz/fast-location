@@ -24,7 +24,7 @@ public class LocationParams {
             .build();
 
     public static final LocationParams LOW_ACCURACY = new Builder()
-            .setAccuracy(LocationAccuracy.MEDIUM)
+            .setAccuracy(LocationAccuracy.LOW)
             .setInterval(5000)
             .setDistance(500)
             .setAcceptableTime(60 * 60 * 1000)

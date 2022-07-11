@@ -79,7 +79,7 @@ public class LocationGooglePlayServicesProvider implements LocationProvider {
 
     @SuppressWarnings({"MissingPermission"})
     @Override
-    public void request(LocationCallbackListener listener, LocationParams params) {
+    public void request(LocationParams params, LocationCallbackListener listener) {
         if (listener == null) {
             EasyLog.w("LocationCallbackListener is null.");
         }
@@ -114,7 +114,7 @@ public class LocationGooglePlayServicesProvider implements LocationProvider {
 
     @SuppressWarnings({"MissingPermission"})
     @Override
-    public void requestSingle(LocationCallbackListener listener, LocationParams params) {
+    public void requestSingle(LocationParams params, LocationCallbackListener listener) {
         if (listener == null) {
             EasyLog.w("LocationCallbackListener is null.");
         }
@@ -122,7 +122,15 @@ public class LocationGooglePlayServicesProvider implements LocationProvider {
         mLocationParams = params;
         CurrentLocationRequest request = getCurrentLocationRequest(params);
         mCancellationToken = mCancellationTokenSource.getToken();
-        getLocationClient().getCurrentLocation(request, mCancellationToken);
+        getLocationClient().getCurrentLocation(request, mCancellationToken)
+                .addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (listener != null) {
+                    listener.onLocationUpdated(location);
+                }
+            }
+        });
         EasyLog.d("Location request single update. accuracy = %s", mLocationParams.getAccuracy());
     }
 

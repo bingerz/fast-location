@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getLocation(LocationParams params) {
-        mFastLocation.getLocation(new LocationResultListener() {
+        mFastLocation.getLocation(true, params, new LocationResultListener() {
             @Override
             public void onResult(Location location) {
                 if (location == null) {
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
                 msg.setData(data);
                 mHandler.sendMessage(msg);
             }
-        }, params, false);
+        });
     }
 
     private void getLastKnowLocation() {

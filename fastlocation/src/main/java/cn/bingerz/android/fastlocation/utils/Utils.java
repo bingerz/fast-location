@@ -4,6 +4,9 @@ import android.content.Context;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
+
+import java.util.Locale;
 
 /**
  * @author hanson
@@ -55,5 +58,32 @@ public class Utils {
     public static boolean isConnected(Context context) {
         NetworkInfo info = getNetworkInfo(context);
         return (info != null && info.isConnected());
+    }
+
+    public static Locale getLocale(Context context) {
+        Locale locale = null;
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                locale = context.getResources().getConfiguration().getLocales().get(0);
+            } else {
+                locale = context.getResources().getConfiguration().locale;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return locale;
+    }
+
+    public static String getCountry(Context context) {
+        Locale locale = getLocale(context);
+        if (locale != null) {
+            return locale.getCountry();
+        } else {
+            return Locale.getDefault().getCountry();
+        }
+    }
+
+    public static boolean isChina(Context context) {
+        return getCountry(context).equalsIgnoreCase("cn");
     }
 }
