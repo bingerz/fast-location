@@ -66,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
                 Bundle data = msg.getData();
                 showLocation((Location) data.getParcelable(KEY_LOCATION));
                 break;
+            default:
+                break;
         }
     }
 
@@ -80,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
         Button getMediumAccuracy = findViewById(R.id.btn_get_medium_accuracy_location);
         Button getLowAccuracy = findViewById(R.id.btn_get_low_accuracy_location);
         Button getLastKnow = findViewById(R.id.btn_get_last_know_location);
+        Button showMap = findViewById(R.id.btn_goto_map);
+        Button cancel = findViewById(R.id.btn_cancel);
         mHandler = new MyHandler(this);
         mFastLocation = new FastLocation(this);
 
@@ -111,11 +115,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final Button showMap = findViewById(R.id.btn_goto_map);
         showMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showChooseMapDialog(mCurrentLocation);
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mFastLocation != null) {
+                    mFastLocation.removeLocationUpdates();
+                }
             }
         });
     }
@@ -135,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
                 msg.setData(data);
                 mHandler.sendMessage(msg);
             }
-        }, params);
+        }, params, false);
     }
 
     private void getLastKnowLocation() {

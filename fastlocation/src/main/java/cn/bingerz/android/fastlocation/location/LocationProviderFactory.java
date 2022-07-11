@@ -15,11 +15,10 @@ public class LocationProviderFactory {
         int result = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
         if (result == ConnectionResult.SUCCESS) {
             locationProvider = new LocationGooglePlayServicesProvider();
-            locationProvider.init(context);
         } else {
             locationProvider = new LocationManagerProvider();
-            locationProvider.init(context);
         }
+        locationProvider.init(context);
         return locationProvider;
     }
 }

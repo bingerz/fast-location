@@ -9,10 +9,10 @@ public class LocationParams {
 
     public static final LocationParams HIGH_ACCURACY = new Builder()
             .setAccuracy(LocationAccuracy.HIGH)
-            .setInterval(500)
-            .setDistance(0)
-            .setAcceptableTime(0)
-            .setAcceptableAccuracy(0)
+            .setInterval(1000)
+            .setDistance(30)
+            .setAcceptableTime(10 * 1000)
+            .setAcceptableAccuracy(30)
             .build();
 
     public static final LocationParams MEDIUM_ACCURACY = new Builder()
@@ -77,11 +77,13 @@ public class LocationParams {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof LocationParams)) return false;
-
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof LocationParams)) {
+            return false;
+        }
         LocationParams that = (LocationParams) obj;
-
         return Float.compare(that.distance, distance) == 0
                 && interval == that.interval
                 && accuracy == that.accuracy;

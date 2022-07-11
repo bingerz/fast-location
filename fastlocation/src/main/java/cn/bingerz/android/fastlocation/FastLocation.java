@@ -109,6 +109,30 @@ public class FastLocation {
         return mLocationParams;
     }
 
+    private boolean requestSingleUpdate(LocationParams params) {
+        try {
+            PermissionUtils.checkLocationGranted(mContext);
+            if (isRequesting) {
+                EasyLog.w("Request location update is busy");
+                return false;
+            }
+            getLocationProvider().requestSingle(new LocationCallbackListener() {
+                @Override
+                public void onLocationUpdated(Location location) {
+                    printf(location);
+                    finishResult(location);
+                    requestTimeoutMsgInit();
+                    isRequesting = false;
+                }
+            }, params);
+            isRequesting = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
     private boolean requestLocationUpdates(LocationParams params) {
         try {
             PermissionUtils.checkLocationGranted(mContext);
@@ -213,12 +237,12 @@ public class FastLocation {
         return isRequesting;
     }
 
-    public void getLocation(LocationResultListener listener)
+    public void getLocation(LocationResultListener listener, boolean isSingle)
             throws SecurityException, IllegalStateException, IllegalArgumentException {
-        getLocation(listener, null);
+        getLocation(listener, null, isSingle);
     }
 
-    public void getLocation(LocationResultListener listener, LocationParams params)
+    public void getLocation(LocationResultListener listener, LocationParams params, boolean isSingle)
             throws SecurityException, IllegalStateException, IllegalArgumentException {
         if (listener == null) {
             throw new IllegalArgumentException("invalid locationResultListener.");
@@ -226,7 +250,9 @@ public class FastLocation {
 
         insertResultListener(listener);
         mLocationParams = params != null ? params : LocationParams.MEDIUM_ACCURACY;
-        if (requestLocationUpdates(mLocationParams)) {
+        if (isSingle) {
+            requestSingleUpdate(mLocationParams);
+        } else if (requestLocationUpdates(mLocationParams)) {
             delaySendRequestTimeout(TIMEOUT_REQUEST_LOCATION);
         }
     }

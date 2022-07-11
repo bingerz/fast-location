@@ -11,6 +11,8 @@ public interface LocationProvider {
 
     void request(LocationCallbackListener listener, LocationParams params);
 
+    void requestSingle(LocationCallbackListener listener, LocationParams params);
+
     void remove();
 
     void getLastLocation(LocationCallbackListener listener);

@@ -5,8 +5,15 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.LocationRequest;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.CancellationSignal;
 import android.os.Looper;
+
+import androidx.annotation.RequiresApi;
+
+import java.util.function.Consumer;
 
 import cn.bingerz.android.fastlocation.utils.EasyLog;
 import cn.bingerz.android.fastlocation.utils.PermissionUtils;
@@ -19,6 +26,7 @@ public class LocationManagerProvider implements LocationProvider {
     private Context mContext = null;
     private LocationParams mLocationParams;
     private LocationManager mLocationManager;
+    private CancellationSignal mCancellationSignal;
     private LocationCallbackListener mLocationCallbackListener;
 
     private LocationListener mLocationListener = new LocationListener() {
@@ -31,7 +39,6 @@ public class LocationManagerProvider implements LocationProvider {
             if (mLocationCallbackListener != null) {
                 mLocationCallbackListener.onLocationUpdated(location);
             }
-            remove();
         }
 
         @Override
@@ -44,6 +51,19 @@ public class LocationManagerProvider implements LocationProvider {
 
         @Override
         public void onProviderDisabled(String provider) {
+        }
+    };
+
+    private Consumer<Location> mLocationConsumer = new Consumer<Location>() {
+        @Override
+        public void accept(Location location) {
+            if (location == null) {
+                EasyLog.e("LocationConsumer callback location is null.");
+                return;
+            }
+            if (mLocationCallbackListener != null) {
+                mLocationCallbackListener.onLocationUpdated(location);
+            }
         }
     };
 
@@ -102,6 +122,52 @@ public class LocationManagerProvider implements LocationProvider {
         EasyLog.d("Location request update. accuracy = %s", mLocationParams.getAccuracy());
     }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    private LocationRequest getLocationRequest(LocationParams params, boolean isSingle) {
+        LocationRequest.Builder builder = new LocationRequest.Builder(params.getInterval())
+                .setMaxUpdates(isSingle ? 1 : Integer.MAX_VALUE)
+                .setDurationMillis(params.getAcceptableTime())
+                .setMaxUpdateDelayMillis(params.getAcceptableTime())
+                .setMinUpdateDistanceMeters(params.getDistance())
+                .setMinUpdateIntervalMillis(params.getInterval());
+
+        switch (params.getAccuracy()) {
+            case HIGH:
+                builder.setQuality(LocationRequest.QUALITY_HIGH_ACCURACY);
+                break;
+            case MEDIUM:
+                builder.setQuality(LocationRequest.QUALITY_BALANCED_POWER_ACCURACY);
+                break;
+            case LOW:
+                builder.setQuality(LocationRequest.QUALITY_LOW_POWER);
+                break;
+            default:
+                break;
+        }
+        return builder.build();
+    }
+
+    @SuppressWarnings({"MissingPermission"})
+    @Override
+    public void requestSingle(LocationCallbackListener listener, LocationParams params) {
+        if (listener == null) {
+            EasyLog.w("LocationCallbackListener is null.");
+        }
+        mLocationCallbackListener = listener;
+        mLocationParams = params;
+        Criteria criteria = getCriteria(getLocationParams());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            String provider = getProvider(params);
+            LocationRequest request = getLocationRequest(params, true);
+            mCancellationSignal = new CancellationSignal();
+            getLocationManager().getCurrentLocation(provider, request, mCancellationSignal, mContext.getMainExecutor(), mLocationConsumer);
+        } else {
+            getLocationManager().requestSingleUpdate(criteria, mLocationListener, Looper.getMainLooper());
+        }
+        EasyLog.d("Location request single update. accuracy = %s", mLocationParams.getAccuracy());
+    }
+
     @SuppressWarnings({"MissingPermission"})
     @Override
     public void remove() {
@@ -109,6 +175,11 @@ public class LocationManagerProvider implements LocationProvider {
             LocationManager locationManager = getLocationManager();
             if (locationManager != null) {
                 locationManager.removeUpdates(mLocationListener);
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                if (mCancellationSignal != null && !mCancellationSignal.isCanceled()) {
+                    mCancellationSignal.cancel();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -121,8 +192,8 @@ public class LocationManagerProvider implements LocationProvider {
             EasyLog.w("LocationCallbackListener is null.");
         }
         Location lastLocation;
-        Location gpsLocation = getLocationByProvider(LocationManager.GPS_PROVIDER);
-        Location networkLocation = getLocationByProvider(LocationManager.NETWORK_PROVIDER);
+        Location gpsLocation = getLastLocationByProvider(LocationManager.GPS_PROVIDER);
+        Location networkLocation = getLastLocationByProvider(LocationManager.NETWORK_PROVIDER);
 
         if (gpsLocation == null) {
             EasyLog.d("GPS Location is null");
@@ -163,7 +234,7 @@ public class LocationManagerProvider implements LocationProvider {
     }
 
     @SuppressWarnings({"MissingPermission"})
-    private Location getLocationByProvider(String provider) {
+    private Location getLastLocationByProvider(String provider) {
         PermissionUtils.checkLocationGranted(mContext);
 
         if (!isSupportedProvider(provider)) {
@@ -187,6 +258,11 @@ public class LocationManagerProvider implements LocationProvider {
         if (provider == null) {
             throw new IllegalArgumentException("Invalid provider.");
         }
+    }
+
+    private String getProvider(LocationParams params) {
+        boolean isHighAccuracy = params != null && params.getAccuracy() == LocationAccuracy.HIGH;
+        return isHighAccuracy ? LocationManager.GPS_PROVIDER : LocationManager.NETWORK_PROVIDER;
     }
 
     private void checkRuntimeEnvironment() {
