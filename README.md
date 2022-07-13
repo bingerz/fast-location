@@ -10,7 +10,7 @@ If you use it in the app of the original Android (Support Google play service), 
 You should add this to your dependencies:
 
 ```groovy
-implementation 'cn.bingerz.android:fastlocation:1.2.1-SNAPSHOT'
+implementation 'cn.bingerz.android:fastlocation:1.2.1'
 ```
 
 ## Starting
@@ -26,12 +26,12 @@ Get the location using the default location strategy
 ```java
     //Start to get location
     boolean isSingle = true; //Single request location;
-    fastLocation.getLocation(new LocationResultListener() {
+    fastLocation.getLocation(isSingle, new LocationResultListener() {
                         @Override
                         public void onResult(Location location) {
                             //Handle your location code
                         }
-                    }, isSingle); // LocationParams default LocationParams.MEDIUM_ACCURACY
+                    }); // LocationParams default LocationParams.MEDIUM_ACCURACY
 ```
 
 Specify parameters to get the location
@@ -39,12 +39,12 @@ Specify parameters to get the location
     //Start to get location
     boolean isSingle = true; //Single request location;
     LocationParams params = LocationParams.HIGH_ACCURACY //other default params:MEDIUM_ACCURACY、LOW_ACCURACY
-    fastLocation.getLocation(new LocationResultListener() {
+    fastLocation.getLocation(isSingle, params, new LocationResultListener() {
                         @Override
                         public void onResult(Location location) {
                             //Handle your location code
                         }
-                    }, params, isSingle);
+                    });
 ```
 
 Get the last known location

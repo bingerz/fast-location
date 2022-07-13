@@ -38,7 +38,7 @@ dependencies {
 //Gradle Maven Publish Plugin Script Configuration
 //Run Script: ./gradlew publish
 
-def versionName = "1.2.1-SNAPSHOT"
+def versionName = "1.2.1"
 def groupName = "cn.bingerz.android"
 def artifactName = "fastlocation"
 def siteUrl = 'https://github.com/bingerz/fast-location'
