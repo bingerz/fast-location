@@ -130,6 +130,7 @@ public class FastLocation {
             isRequesting = true;
         } catch (Exception e) {
             e.printStackTrace();
+            isRequesting = false;
             return false;
         }
         return true;
@@ -146,6 +147,7 @@ public class FastLocation {
             isRequesting = true;
         } catch (Exception e) {
             e.printStackTrace();
+            isRequesting = false;
             return false;
         }
         return true;
@@ -244,9 +246,8 @@ public class FastLocation {
 
         insertResultListener(listener);
         mLocationParams = params != null ? params : LocationParams.MEDIUM_ACCURACY;
-        if (isSingle) {
-            requestSingleUpdate(mLocationParams);
-        } else if (requestLocationUpdates(mLocationParams)) {
+        boolean result = isSingle ? requestSingleUpdate(mLocationParams) : requestLocationUpdates(mLocationParams);
+        if (result) {
             delaySendRequestTimeout(TIMEOUT_REQUEST_LOCATION);
         }
     }

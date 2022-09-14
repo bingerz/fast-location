@@ -10,7 +10,7 @@ If you use it in the app of the original Android (Support Google play service), 
 You should add this to your dependencies:
 
 ```groovy
-implementation 'cn.bingerz.android:fastlocation:1.2.1'
+implementation 'cn.bingerz.android:fastlocation:1.2.2'
 ```
 
 ## Starting
